@@ -1,5 +1,3 @@
-import {applyOperation} from "./regulaOperations";
-
 interface Variable {
     identifier: string;
     operation: string;
@@ -18,7 +16,56 @@ interface UserData {
     [key: string]: string | string[] | number | number[];
 }
 
-const isUndefined = (LHS, RHS) => {
+interface Operation {
+    [key: string]: (LHS: unknown, RHS: unknown) => boolean | undefined;
+}
+
+let operations: Operation = {
+    "===": (LHS: unknown, RHS: unknown) => {
+        return LHS === RHS;
+    },
+    "!==": (LHS: unknown, RHS: unknown) => {
+        return LHS !== RHS;
+    },
+    ">": (LHS: unknown, RHS: unknown) => {
+        if (typeof LHS === "string" && typeof RHS === "string") {
+            return LHS > RHS;
+        } else if (typeof LHS === "number" && typeof RHS === "number") {
+            return LHS > RHS;
+        } else {
+            return undefined;
+        }
+    },
+    "<": (LHS: unknown, RHS: unknown) => {
+        if (typeof LHS === "string" && typeof RHS === "string") {
+            return LHS < RHS;
+        } else if (typeof LHS === "number" && typeof RHS === "number") {
+            return LHS < RHS;
+        } else {
+            return undefined;
+        }
+    },
+    ">==": (LHS: unknown, RHS: unknown) => {
+        if (typeof LHS === "string" && typeof RHS === "string") {
+            return LHS >= RHS;
+        } else if (typeof LHS === "number" && typeof RHS === "number") {
+            return LHS >= RHS;
+        } else {
+            return undefined;
+        }
+    },
+    "<==": (LHS: unknown, RHS: unknown) => {
+        if (typeof LHS === "string" && typeof RHS === "string") {
+            return LHS <= RHS;
+        } else if (typeof LHS === "number" && typeof RHS === "number") {
+            return LHS <= RHS;
+        } else {
+            return undefined;
+        }
+    },
+}
+
+const isUndefined = (LHS: unknown, RHS: unknown) => {
     return LHS === undefined || RHS === undefined;
 }
 
@@ -46,13 +93,18 @@ const prepareData = (data: unknown) => {
     }
 }
 
-const applyRules = (rules: Rule[], data: UserData) => {
-    const results = [];
+const applyOperation = (LHS: unknown, RHS: unknown, operation: string) => {
+    const getOperation = operations[operation];
+    return getOperation(LHS, RHS);
+};
+
+export const applyRules = (rules: Rule[], data: UserData) => {
+    const results: unknown[] = [];
     if (rules.length === 0) {
         return
     }
 
-    rules.forEach((rule) => {
+    rules.forEach((rule: Rule) => {
         const result = applyRule(rule, data);
         if (result !== null) {
             results.push(result);
@@ -70,7 +122,7 @@ const applyRule = (rule: Rule, data: UserData) => {
         const LHS = prepareInput(data[it.identifier.trim()]); //User Input
         const RHS = prepareInput(it.operand); //Rule Input
         const result = (!isUndefined(LHS, RHS)) ? applyOperation(LHS, RHS, it.operation) : false;
-        condition = condition.replace(it.expression, result);
+        condition = (result) ? condition.replace(it.expression, result.toString()) : condition.replace(it.expression, "false");
     })
 
     // eslint-disable-next-line no-eval
@@ -81,4 +133,13 @@ const applyRule = (rule: Rule, data: UserData) => {
     }
 }
 
-export default applyRules;
+export const registerOperations = (operationObject: Operation) => {
+    operations = {
+        ...operations,
+        ...operationObject
+    }
+}
+
+export const overrideOperation = (key: string, operation: (LHS: unknown, RHS: unknown) => boolean | undefined) => {
+    operations[key] = operation;
+}
