@@ -1,0 +1,25 @@
+{
+  "name": "regula-js",
+  "version": "1.0.0",
+  "description": "A rule parsing engine written in JS",
+  "main": "regula.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MeliodasX/regula-js.git"
+  },
+  "keywords": [
+    "rule",
+    "rule-engine",
+    "regula-js",
+    "regula.js"
+  ],
+  "author": "MeliodasX",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MeliodasX/regula-js/issues"
+  },
+  "homepage": "https://github.com/MeliodasX/regula-js#readme"
+}
