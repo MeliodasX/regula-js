@@ -150,4 +150,8 @@ QUnit.test('register operation test true', assert => {
     }), [true]);
 });
 
+QUnit.test('undefined user input test', assert => {
+    assert.deepEqual(applyRules([registerOperationRule], {}), [false]);
+});
+
 
