@@ -45,7 +45,7 @@ let operations: Operation = {
             return undefined;
         }
     },
-    ">==": (LHS: unknown, RHS: unknown) => {
+    ">=": (LHS: unknown, RHS: unknown) => {
         if (typeof LHS === "string" && typeof RHS === "string") {
             return LHS >= RHS;
         } else if (typeof LHS === "number" && typeof RHS === "number") {
@@ -54,7 +54,7 @@ let operations: Operation = {
             return undefined;
         }
     },
-    "<==": (LHS: unknown, RHS: unknown) => {
+    "<=": (LHS: unknown, RHS: unknown) => {
         if (typeof LHS === "string" && typeof RHS === "string") {
             return LHS <= RHS;
         } else if (typeof LHS === "number" && typeof RHS === "number") {
