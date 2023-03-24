@@ -98,24 +98,8 @@ const applyOperation = (LHS: unknown, RHS: unknown, operation: string) => {
     return getOperation(LHS, RHS);
 };
 
-export const applyRules = (rules: Rule[], data: UserData) => {
-    const results: unknown[] = [];
-    if (rules.length === 0) {
-        return
-    }
-
-    rules.forEach((rule: Rule) => {
-        const result = applyRule(rule, data);
-        if (result !== null) {
-            results.push(result);
-        }
-    })
-
-    return results;
-}
-
 const applyRule = (rule: Rule, data: UserData) => {
-    const variables = {...rule.variables};
+    const variables = [...rule.variables];
     let condition = rule.condition;
 
     variables.forEach((it: Variable) => {
@@ -131,6 +115,22 @@ const applyRule = (rule: Rule, data: UserData) => {
     } else {
         return false;
     }
+}
+
+export const applyRules = (rules: Rule[], data: UserData) => {
+    const results: unknown[] = [];
+    if (rules.length === 0) {
+        return
+    }
+
+    rules.forEach((rule: Rule) => {
+        const result = applyRule(rule, data);
+        if (result !== null) {
+            results.push(result);
+        }
+    })
+
+    return results;
 }
 
 export const registerOperations = (operationObject: Operation) => {
