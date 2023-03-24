@@ -23,7 +23,7 @@ yarn add regula-js
 import { applyRules } from "regula-js"
 ```
 
-2. Pass in the array of rule objects as the first parameter and the user input object as the second parameter.
+2. Regula.JS takes in an array of rule objects as the first parameter and the user input object as the second parameter.
 
 ```js
 const result = applyRules(rules, userInput);
@@ -38,6 +38,123 @@ const result = applyRules([rule], userInput);
 3. ???
 
 4. Profit
+
+## Rule Object
+
+A rule object typically looks like this
+
+```js
+const singleVarRule = {
+    variables: [
+        {
+            identifier: "age",
+            operation: ">",
+            operand: 18,
+            expression: "age > 18"
+        }
+    ],
+    condition: "age > 18",
+};
+```
+This is what a single variable rule looks like. You can see a rule object consists of two major keys; ```variables```, and ```condition```. <br/>
+
+Here's a corresponding data or user input object for this rule
+
+```js
+const data = {
+        age: 25,
+    }
+```
+
+### variables
+
+Going back to the rule object, ```variables``` is an array of objects that contains sub conditions that make up the full condition. In this case, the sub-condition and the full condition are the same. <br/>
+
+Let us discuss the objects in ```variables``` in more detail.
+
+- ```identifier``` key is how Regula.JS knows what input to take from the data or user input object. 
+- ```operation``` corresponds to the operation (default or registered) to be used to evaluate the sub-condition.
+- ```operand``` corresponds to what value will the user input be compared against.
+- ```expression``` is an identifier used by Regula.JS to know sub-condition has been evaluated. Typically this can be anything unique such as uuid but it is recommended to write it as a normal programming condition to make it more human-readable.
+
+### conditions
+
+Let us now discussion the ```condition``` key. 
+- All sub-conditions once evaluated are substituted in the condition value.
+- All logical operations are defined in the condition value.
+- The ```expression``` key is utilized to identify which part of the condition value has to be substituted.
+
+For a more indepth idea, look at this multi variable rule below.
+
+```js
+const multiVarRule = {
+    variables: [
+        {
+            identifier: "age",
+            operation: ">",
+            operand: 18,
+            expression: "age > 18"
+        },
+        {
+            identifier: "position",
+            operation: "<",
+            operand: 4,
+            expression: "position < 4"
+        },
+        {
+            identifier: "position",
+            operation: ">",
+            operand: 0,
+            expression: "position > 0"
+        }
+    ],
+    condition: "age > 18 && (position < 4 && position > 0)",
+};
+```
+### An alternate method to write a condition
+
+The above rule can be written as
+
+```js
+const multiVarRule = {
+    variables: [
+        {
+            identifier: "age",
+            operation: ">",
+            operand: 18,
+            expression: "8033fb3c-a1a8-4be4-8de8-b3ef6dfbbff2"
+        },
+        {
+            identifier: "position",
+            operation: "<",
+            operand: 4,
+            expression: "4ab4bbf0-09a7-4089-8616-9d9e02992339"
+        },
+        {
+            identifier: "position",
+            operation: ">",
+            operand: 0,
+            expression: "70a86a21-859a-4840-a06c-8630d3e5556f"
+        }
+    ],
+    condition: "8033fb3c-a1a8-4be4-8de8-b3ef6dfbbff2 && 
+                (4ab4bbf0-09a7-4089-8616-9d9e02992339 && 
+                70a86a21-859a-4840-a06c-8630d3e5556f)",
+};
+```
+and it would still evaluate correctly.
+
+### Additional Keys
+
+The rule object accepts two optional keys; ```result```, and ```extra```.
+
+#### result
+
+You can pass anything you want into the result key. If the rule is evaluated as true and the result key exists, Regula.JS will return the result key instead of ```true```.
+
+#### extra
+
+This key can be used to store any extra data such as some kind of metadata you want stored with the rule object. Regula.JS does not acknowledge the extra key and ignores whatever content is present in this key.
 
 ## Supported Operations
 
@@ -69,6 +186,7 @@ overrideOperation()
 ## registerOperations()
 
 ```registerOperations``` function requires an object that contains the identifier for your function as well as the function to be called.
+
 ### For example
 
 ```js
@@ -85,6 +203,7 @@ Here, we are registering a new operation called includes at runtime that can now
 ## overrideOperation()
 
 ```overrideOperation``` function requires the identifier for the operation to be replaced as well as the new operation replacement.
+
 ### For example
 
 ```js
