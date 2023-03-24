@@ -50,10 +50,10 @@ const singleVarRule = {
             identifier: "age",
             operation: ">",
             operand: 18,
-            expression: "age > 18"
+            expression: "$1"
         }
     ],
-    condition: "age > 18",
+    condition: "$1",
 };
 ```
 This is what a single variable rule looks like. You can see a rule object consists of two major keys; ```variables```, and ```condition```. <br/>
@@ -75,7 +75,7 @@ Let us discuss the objects in ```variables``` in more detail.
 - ```identifier``` key is how Regula.JS knows what input to take from the data or user input object. 
 - ```operation``` corresponds to the operation (default or registered) to be used to evaluate the sub-condition.
 - ```operand``` corresponds to what value will the user input be compared against.
-- ```expression``` is an identifier used by Regula.JS to know sub-condition has been evaluated. Typically this can be anything unique such as uuid but it is recommended to write it as a normal programming condition to make it more human-readable.
+- ```expression``` is an identifier used by Regula.JS to know sub-condition has been evaluated. Typically this can be anything unique such as uuid or an index.
 
 ### conditions
 
@@ -85,35 +85,6 @@ Let us now discussion the ```condition``` key.
 - The ```expression``` key is utilized to identify which part of the condition value has to be substituted.
 
 For a more indepth idea, look at this multi variable rule below.
-
-```js
-const multiVarRule = {
-    variables: [
-        {
-            identifier: "age",
-            operation: ">",
-            operand: 18,
-            expression: "age > 18"
-        },
-        {
-            identifier: "position",
-            operation: "<",
-            operand: 4,
-            expression: "position < 4"
-        },
-        {
-            identifier: "position",
-            operation: ">",
-            operand: 0,
-            expression: "position > 0"
-        }
-    ],
-    condition: "age > 18 && (position < 4 && position > 0)",
-};
-```
-### An alternate method to write a condition
-
-The above rule can be written as
 
 ```js
 const multiVarRule = {
@@ -140,8 +111,6 @@ const multiVarRule = {
     condition: "$1 && ($2 && $3)",
 };
 ```
-and it would still evaluate correctly.
-
 ### Additional Keys
 
 The rule object accepts two optional keys; ```result```, and ```extra```.
