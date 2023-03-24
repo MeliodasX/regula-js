@@ -100,9 +100,32 @@ Here, we are overriding the strict equality operation with loose equality operat
 
 - The engine currently uses ```eval``` at the end to evaluate the whole condition. There are plans to replace eval with a custom function that evaluates the condition in the future but eval stays for now.
 - A side-effect of using ```eval``` is, the condition being parsed follows the operation precedence provided by JS. There are plans to allow users to override the current evaluation algorithm with their own in some future version.
+- Regula.JS currently only supports one condition in one rule object.
 
-## How can you help
+To further elaborate my point,
+
+```js
+if (age > 16 && position < 4) {
+    ///do something
+}
+```
+It does not currently support else and else if conditions.
+For example,
+
+```js
+if (age > 16 && position < 4) {
+    ///do something
+} else if (age < 16 && position > 4) {
+    ///do something else
+} else {
+    ///execute the else clause
+}
+```
+The above snippet is currently not supported by Regula.JS. There are plans to include this functionality in the next version.
+
+## How can you help?
 
 - I have added some rudimentary unit tests via QUnit in the library but they are not at all sufficient to cover everything Regula.JS has to offer. You can help by adding more in-depth test cases that also covers the edge cases as well.
 - You can also help by requesting features, reporting bugs or helping to develop Regula.JS further.
+- If you feel like I missed discussing something in the readme, do be sure to tell me about that as well.
 
