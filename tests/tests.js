@@ -1,4 +1,4 @@
-const { applyRules, overrideOperation, registerOperations } = require("../regula")
+const { applyRules, overrideOperation, registerOperations } = require("../regula-js")
 
 const singleVarRule = {
     variables: [
