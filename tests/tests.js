@@ -1,4 +1,4 @@
-const { applyRules } = require("../regula")
+const { applyRules, overrideOperation, registerOperations } = require("../regula")
 
 const singleVarRule = {
     variables: [
@@ -36,10 +36,39 @@ const multiVarRule = {
     condition: "age > 18 && (position < 4 && position > 0)",
 };
 
-const data = {
-    age: 17,
-    position: 2,
+const overrideOperationRule = {
+    variables: [
+        {
+            identifier: "age",
+            operation: "===",
+            operand: 18,
+            expression: "age === 18"
+        }
+    ],
+    condition: "age === 18",
 };
+
+const registerOperationRule = {
+    variables: [
+        {
+            identifier: "prompt",
+            operation: "includes",
+            operand: "GPT",
+            expression: "prompt includes GPT"
+        }
+    ],
+    condition: "prompt includes GPT",
+};
+
+registerOperations({
+    "includes": (LHS, RHS) => {
+        return LHS.includes(RHS);
+    }
+});
+
+overrideOperation("===", (LHS, RHS) => {
+    return LHS !== RHS;
+})
 
 QUnit.module('applyRules');
 
@@ -96,3 +125,29 @@ QUnit.test('multi variable condition false 5', assert => {
         position: -1,
     }), [false]);
 });
+
+QUnit.test('override operation test false', assert => {
+    assert.deepEqual(applyRules([overrideOperationRule], {
+        age: 18,
+    }), [false]);
+});
+
+QUnit.test('override operation test true', assert => {
+    assert.deepEqual(applyRules([overrideOperationRule], {
+        age: 17,
+    }), [true]);
+});
+
+QUnit.test('register operation test false', assert => {
+    assert.deepEqual(applyRules([registerOperationRule], {
+        prompt: "chatbot",
+    }), [false]);
+});
+
+QUnit.test('register operation test true', assert => {
+    assert.deepEqual(applyRules([registerOperationRule], {
+        prompt: "chatGPT",
+    }), [true]);
+});
+
+
