@@ -122,24 +122,22 @@ const multiVarRule = {
             identifier: "age",
             operation: ">",
             operand: 18,
-            expression: "8033fb3c-a1a8-4be4-8de8-b3ef6dfbbff2"
+            expression: "$1"
         },
         {
             identifier: "position",
             operation: "<",
             operand: 4,
-            expression: "4ab4bbf0-09a7-4089-8616-9d9e02992339"
+            expression: "$2"
         },
         {
             identifier: "position",
             operation: ">",
             operand: 0,
-            expression: "70a86a21-859a-4840-a06c-8630d3e5556f"
+            expression: "$3"
         }
     ],
-    condition: "8033fb3c-a1a8-4be4-8de8-b3ef6dfbbff2 && 
-                (4ab4bbf0-09a7-4089-8616-9d9e02992339 && 
-                70a86a21-859a-4840-a06c-8630d3e5556f)",
+    condition: "$1 && ($2 && $3)",
 };
 ```
 and it would still evaluate correctly.
